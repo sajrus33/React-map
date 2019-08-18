@@ -12,7 +12,9 @@ const AccordionBs = props => {
             </Accordion.Toggle>
                 </Card.Header>
                 <Accordion.Collapse eventKey="0">
-                    <Card.Body>{props.map}</Card.Body>
+                    <Card.Body style={{ height: "50vh", padding: 0 }}>
+                        {props.map}
+                    </Card.Body>
                 </Accordion.Collapse>
             </Card>
             <Card>
@@ -22,7 +24,9 @@ const AccordionBs = props => {
             </Accordion.Toggle>
                 </Card.Header>
                 <Accordion.Collapse eventKey="1">
-                    <Card.Body>{props.table}</Card.Body>
+                    <Card.Body style={{ padding: 0 }}>
+                        {props.table}
+                    </Card.Body>
                 </Accordion.Collapse>
             </Card>
         </Accordion>

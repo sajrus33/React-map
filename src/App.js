@@ -1,85 +1,157 @@
-import React, { Component } from "react";
-import AccordionBs from "./components/Accordion";
-
+import React, { Component, Fragment } from "react";
+import Accordion from "./components/Accordion";
+import Popup from "./components/Popup";
 import Map from "./components/Map";
 import Table from "./components/Table";
-
-
-
-
 
 class App extends Component {
 
   state = {
     markers: [],
     viewport: {
-      latitude: -37.8136,
-      longitude: 144.96332,
+      width: "100%",
+      height: "100%",
+      latitude: 50.00,
+      longitude: 20.00,
       zoom: 14.5,
       pitch: 40,
       bearing: 0
     },
+    popupShow: false,
+    draggedMarkerName: null,
+    newMarkerPos: null,
+    newMarkerTxt: "location"
   }
 
-  draggedMarkerPos = null;
+  /*   
+   resize viewport
+  */
+  componentDidMount() {
+    window.addEventListener('resize', this.resizeMap, false)
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.resizeMap);
+  }
+
+  resizeMap = () => {
+    const viewport = { ...this.state.viewport }
+    viewport.width = "100%";
+    viewport.height = "100%";
+    this.setState({
+      viewport
+    });
+  }
 
   changeMapViewport = (viewport) => {
     this.setState({ viewport })
   }
-  handleMapClick = ({ lngLat: [lng, lat] }) => {
 
+
+  /*
+   creating marker
+  */
+  handleMapClick = ({ lngLat: [lng, lat] }) => {
     this.setState({
-      markers: [...this.state.markers, { lng, lat }]
+      newMarkerPos: { lng, lat },
+      popupShow: true
     })
   }
 
-
-
-  dragStart = e => {
-    this.draggedMarkerPos = e.lngLat;
-  };
-
-
-
-  dragEnd = e => {
-    const [draggedLng, draggedLat] = this.draggedMarkerPos;
-    const markers = this.state.markers;
-    const [acutalLng, actualLat] = e.lngLat;
-
-    const droppedMarker = markers.filter(m =>
-      m.lng === draggedLng && m.lat === draggedLat);
-    const droppedIndex = markers.indexOf(droppedMarker[0]);
-    if (droppedIndex >= 0) {
-      markers[droppedIndex] = { lng: acutalLng, lat: actualLat };
-      this.setState({
-        markers
-      });
-    }
-
-  };
-  render() {
-
-    return (
-      <div>
-
-        <AccordionBs
-          map={<Map
-            handleClick={this.handleMapClick}
-            changeViewport={this.changeMapViewport}
-            markers={this.state.markers}
-            viewport={this.state.viewport}
-            dragStart={this.dragStart}
-            dragEnd={this.dragEnd}
-          >
-          </Map>}
-          table={<Table></Table>}> </AccordionBs>
-      </div>
-    )
-
+  popupOnChange = e => {
+    this.setState({
+      newMarkerTxt: e.target.value
+    })
   }
 
+  // valid nr for next equal marker name 
+  validCounter = 0;
+  validateMarkerName = (name) => {
+    const notValidName = this.state.markers.find(m => m.name === name)
+    if (notValidName) {
+      this.validCounter++;
+      let newName = name;
+      if (this.validCounter > 1) {
+        newName = newName.slice(0, -1);
+      }
+      newName += this.validCounter;
+
+      return this.validateMarkerName(newName)
+
+    } else {
+      // reset valid counter
+      this.validCounter = 0;
+      return name
+    }
+  }
+
+  popupOnSubmit = e => {
+    e.preventDefault();
+    const name = this.validateMarkerName(this.state.newMarkerTxt);
+
+    const newMarker = Object.assign({}, this.state.newMarkerPos, { name });
+    this.setState({
+      markers: [...this.state.markers, newMarker],
+      newMarkerTxt: "location",
+      popupShow: false
+    })
+  }
+
+  popupOnCancel = e => {
+    this.setState({
+      popupShow: false,
+      newMarkerTxt: "location"
+
+    })
+  }
+
+  /*   
+  dragging markers
+  */
+
+  dragStart = e => {
+    this.setState({
+      draggedMarkerName: e.target.innerText
+    })
+  };
+
+  dragEnd = e => {
+    const [acutalLng, actualLat] = e.lngLat;
+    const draggedName = this.state.draggedMarkerName;
+    const markers = this.state.markers;
+
+    const droppedMarker = markers.find(m => m.name === draggedName);
+    const droppedIndex = markers.indexOf(droppedMarker);
+
+    if (droppedIndex >= 0) {
+      markers[droppedIndex] = Object.assign(markers[droppedIndex], { lng: acutalLng, lat: actualLat });
+      this.setState({
+        markers
+      })
+    }
+  };
+
+
+  render() {
+    const { markers, viewport, popupShow } = this.state;
+    return (
+      <Fragment>
+        {popupShow ? <Popup onSubmit={this.popupOnSubmit} onCancel={this.popupOnCancel} onChange={this.popupOnChange} ></Popup> : null}
+        <Accordion
+          map=
+          {<Map
+            handleClick={this.handleMapClick}
+            changeViewport={this.changeMapViewport}
+            markers={markers}
+            viewport={viewport}
+            onDragStart={this.dragStart}
+            onDragEnd={this.dragEnd}
+          ></Map>}
+          table=
+          {<Table markers={markers}></Table>}>
+        </Accordion>
+      </Fragment>
+    )
+  }
 }
-
-
-
 export default App;
