@@ -12,7 +12,7 @@ const AccordionBs = props => {
             </Accordion.Toggle>
                 </Card.Header>
                 <Accordion.Collapse eventKey="0">
-                    <Card.Body style={{ height: "50vh", padding: 0 }}>
+                    <Card.Body style={{ height: "calc(100vh - 128px)", padding: 0 }}>
                         {props.map}
                     </Card.Body>
                 </Accordion.Collapse>
