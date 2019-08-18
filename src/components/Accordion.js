@@ -7,7 +7,7 @@ const AccordionBs = props => {
         <Accordion defaultActiveKey="0">
             <Card>
                 <Card.Header>
-                    <Accordion.Toggle as={Button} variant="link" eventKey="0">
+                    <Accordion.Toggle as={Button} style={{ backgroundColor: '#17a2b8' }} variant="button" eventKey="0">
                         Map
             </Accordion.Toggle>
                 </Card.Header>
@@ -19,7 +19,7 @@ const AccordionBs = props => {
             </Card>
             <Card>
                 <Card.Header>
-                    <Accordion.Toggle as={Button} variant="link" eventKey="1">
+                    <Accordion.Toggle as={Button} style={{ backgroundColor: '#17a2b8' }} variant="button" eventKey="1">
                         Targets table
             </Accordion.Toggle>
                 </Card.Header>
