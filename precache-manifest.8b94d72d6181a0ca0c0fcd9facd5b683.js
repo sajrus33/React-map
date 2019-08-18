@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "4f64b149c6c9f75148299a3c2e614cd5",
+    "revision": "9555a435e216ced4c381e7ecf4e57c99",
     "url": "/React-map/index.html"
   },
   {
@@ -8,7 +8,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/React-map/static/css/2.266e55a5.chunk.css"
   },
   {
-    "revision": "df6f5c6fe97e61eceae5",
+    "revision": "ede25e875eaef3fb1101",
     "url": "/React-map/static/css/main.34de6062.chunk.css"
   },
   {
@@ -16,8 +16,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/React-map/static/js/2.4f7e971c.chunk.js"
   },
   {
-    "revision": "df6f5c6fe97e61eceae5",
-    "url": "/React-map/static/js/main.b53e1b02.chunk.js"
+    "revision": "ede25e875eaef3fb1101",
+    "url": "/React-map/static/js/main.eac227d4.chunk.js"
   },
   {
     "revision": "64dbabfad8d1a4137a57",
